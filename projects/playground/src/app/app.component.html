@@ -1,0 +1,30 @@
+<form style="display: flex; flex-direction: column">
+
+  <mat-form-field style="width: 300px; margin: 30px">
+    <mat-label>Amount</mat-label>
+    <input type="text"
+           inputmode="decimal"
+           style="text-align: right;"
+           matInput
+           coreCurrency
+           name="someInput"
+           [(ngModel)]="someValue"/>
+    <span matSuffix>&nbsp;€</span>
+    <mat-hint>Raw Value: {{someValue}}</mat-hint>
+  </mat-form-field>
+
+  <mat-form-field style="width: 300px; margin: 30px">
+    <mat-label>Interest (with negative value)</mat-label>
+    <input type="text"
+           inputmode="text"
+           style="text-align: right;"
+           matInput
+           coreCurrency
+           [allowNegative]="true"
+           name="nullInput"
+           [(ngModel)]="nullValue"/>
+    <span matSuffix>&nbsp;€</span>
+    <mat-hint>Raw Value: {{nullValue}}</mat-hint>
+  </mat-form-field>
+</form>
+
