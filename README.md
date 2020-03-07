@@ -1,0 +1,1 @@
+# ngx-consiliari-core
