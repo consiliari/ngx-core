@@ -29,6 +29,13 @@ export class CoreCurrencyDirective implements ControlValueAccessor {
   public minNumber = -999999999999.99;
 
   /**
+   * false (default) cutoff  3.66666 -> 3.66
+   * true round 3.66666 -> 3.67
+   */
+  @Input()
+  public roundToPrecision = false;
+
+  /**
    *  last seperator will be assumed to be decimal instead of thousand grouping seperator
    */
   @Input()
@@ -37,7 +44,7 @@ export class CoreCurrencyDirective implements ControlValueAccessor {
   private positiveDecimal = new RegExp(/^\d*[\.|,]?\d*$/g);
   private allDecimal = new RegExp(/^-?\d*[\.|,]?\d*$/g);
 
-  private specialKeys = ['Backspace', 'Delete', 'ArrowLeft', 'ArrowRight', 'Del', 'Tab'];
+  private specialKeys = ['Backspace', 'Delete', 'ArrowLeft', 'ArrowRight', 'Del', 'Tab', 'Home', 'End'];
 
   public onChange: any = (_) => {
   };
@@ -109,6 +116,10 @@ export class CoreCurrencyDirective implements ControlValueAccessor {
       }
     }
 
+    if (!this.roundToPrecision && fraction && fraction.length > 2) {
+      fraction = fraction.substr(0, 2);
+    }
+
     let f = parseFloat(fraction ? integer + '.' + fraction : integer);
 
     if (isNaN(f)) {
@@ -173,7 +184,7 @@ export class CoreCurrencyDirective implements ControlValueAccessor {
     console.log(event);
 
     // allow cut copy past
-    if (event.composed && (event.key === 'x' || event.key === 'v' || event.key === 'c') && event.ctrlKey) {
+    if (event.composed && (event.key === 'x' || event.key === 'v' || event.key === 'c' || event.key === 'a') && event.ctrlKey) {
       return;
     }
 
