@@ -1,4 +1,4 @@
-import {Directive, ElementRef, forwardRef, HostListener, Input} from '@angular/core';
+import {Directive, ElementRef, forwardRef, HostListener, Input, Renderer2} from '@angular/core';
 import {ControlValueAccessor, NG_VALUE_ACCESSOR} from '@angular/forms';
 
 export const CUSTOM_INPUT_CURRENCY_CONTROL_VALUE_ACCESSOR: any = {
@@ -51,7 +51,7 @@ export class CoreCurrencyDirective implements ControlValueAccessor {
   public onTouched: any = () => {
   };
 
-  constructor(private el: ElementRef) {
+  constructor(private el: ElementRef, private renderer: Renderer2) {
   }
 
   numberToString(f: number) {
@@ -180,8 +180,10 @@ export class CoreCurrencyDirective implements ControlValueAccessor {
 
   @HostListener('keydown', ['$event'])
   onKeyDown(event) {
-
-    console.log(event);
+    if (event.key == 'Enter') {
+      this.el.nativeElement.blur();
+      return;
+    }
 
     // allow cut copy past
     if (event.composed && (event.key === 'x' || event.key === 'v' || event.key === 'c' || event.key === 'a') && event.ctrlKey) {
