@@ -180,6 +180,10 @@ export class CoreCurrencyDirective implements ControlValueAccessor {
 
   @HostListener('keydown', ['$event'])
   onKeyDown(event) {
+    if (!event.key) {
+      return;
+    }
+
     if (event.key == 'Enter') {
       this.el.nativeElement.blur();
       return;
