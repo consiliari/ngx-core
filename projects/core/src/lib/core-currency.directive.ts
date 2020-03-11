@@ -41,6 +41,9 @@ export class CoreCurrencyDirective implements ControlValueAccessor {
   @Input()
   public assumeDecimalOverGroup = false;
 
+  @Input()
+  public updateMode: 'instant' | 'blur' = 'instant';
+
   private positiveDecimal = new RegExp(/^\d*[\.|,]?\d*$/g);
   private allDecimal = new RegExp(/^-?\d*[\.|,]?\d*$/g);
 
@@ -170,6 +173,8 @@ export class CoreCurrencyDirective implements ControlValueAccessor {
     setTimeout(() => {
       try {
         this.el.nativeElement.value = this.parseValue();
+        const s = this.stringToNumber();
+        this.onChange(s);
         // const s = this.stringToNumber();
         // this.onChange(s);
       } catch (e) {
@@ -185,6 +190,9 @@ export class CoreCurrencyDirective implements ControlValueAccessor {
     }
 
     if (event.key == 'Enter') {
+      const s = this.stringToNumber();
+      this.onChange(s);
+
       this.el.nativeElement.blur();
       return;
     }
@@ -196,18 +204,33 @@ export class CoreCurrencyDirective implements ControlValueAccessor {
 
     // allow navigation
     if (this.specialKeys.indexOf(event.key) !== -1) {
+
+      if (this.updateMode === 'instant') {
+        setTimeout(() => {
+          const s = this.stringToNumber();
+          this.onChange(s);
+        }, 0);
+      }
+
       return;
     }
 
     const matches = this.allowNegative ? event.key.match(this.allDecimal) : event.key.match(this.positiveDecimal);
+
+    if (!matches) {
+      event.preventDefault();
+    }
 
     if (this.el.nativeElement.value && this.el.nativeElement.value.length > 30) {
       event.preventDefault();
       return;
     }
 
-    if (!matches) {
-      event.preventDefault();
+    if (this.updateMode === 'instant') {
+      setTimeout(() => {
+        const s = this.stringToNumber();
+        this.onChange(s);
+      }, 0);
     }
   }
 
