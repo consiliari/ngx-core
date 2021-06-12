@@ -33,6 +33,7 @@ jobs:
         npm version ${{GITHUB_REF#refs/tags/}} --no-git-tag-version'
         npm run build:core
         
-    - run: npm publish
-        env:
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+    - name: npm publish
+      run: npm publish
+      env:
+        NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
