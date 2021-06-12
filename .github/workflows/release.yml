@@ -1,5 +1,4 @@
 name: Release
-
 on:
   push:
     tags:
@@ -31,7 +30,7 @@ jobs:
     - name: npm ci and npm run build
       run: |
         npm ci
-        npm version ${GITHUB_REF#refs/tags/} --no-git-tag-version'
+        npm version ${{GITHUB_REF#refs/tags/}} --no-git-tag-version'
         npm run build:core
         
     - run: npm publish
